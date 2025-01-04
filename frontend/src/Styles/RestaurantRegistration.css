@@ -1,0 +1,85 @@
+.registration-form body {
+  
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 20px;
+}
+
+.registration-form {
+  max-width: 600px;
+  margin: auto;
+  margin-top: 15px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.registration-form h1 {
+  text-align: center;
+  color: #333;
+}
+
+.registration-form h2 {
+  text-align: center;
+  color: #333;
+}
+
+.registration-form label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.registration-form [type="text"], input[type="number"] {
+  width: calc(100% - 10px);
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.registration-form .table-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 50px); /* 5 столбцов */
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.registration-form .table-row {
+  display: contents; /* Позволяет использовать grid внутри */
+}
+
+.registration-form .table-cell {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: #f0f0f0; /* Цвет по умолчанию */
+  transition: background-color 0.3s, transform 0.2s; /* Плавный переход */
+  margin-left: 130px;
+}
+
+.table-cell:hover {
+  background-color: #e0e0e0; /* Цвет при наведении */
+}
+
+.table-cell.occupied {
+  background-color: #a0e0a0; /* Цвет занятых ячеек */
+}
+
+.registration-form button {
+  width: calc(100% - 10px);
+  padding: 10px;
+  background-color: seagreen; /* Зеленый цвет кнопки */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.registration-form button:hover {
+  background-color: rgb(38, 113, 70); /* Темнее при наведении */
+}

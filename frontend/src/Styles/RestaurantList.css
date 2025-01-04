@@ -1,0 +1,64 @@
+.rlist {
+    list-style-type: none; /* Убираем стандартные маркеры */
+    padding: 0; /* Убираем отступы */
+}
+
+.rlist li {
+    position: relative; /* Для позиционирования псевдоэлемента */
+    padding-left: 30px; /* Отступ для текста */
+}
+
+
+
+.rlist h1{
+    margin: 10px;
+    margin-bottom: 25px;
+    color: rgb(0, 0, 0);
+    
+}
+
+.rlist li::before {
+    content: "";
+    background-image: url(../assets/chair.png); /* Ваше изображение */
+    background-size: 20px 20px; /* Задайте нужные размеры */
+    width: 20px; /* Ширина маркера */
+    height: 20px; /* Высота маркера */
+    position: absolute; /* Позиционирование относительно li */
+    left: 0; /* Сдвиг влево */
+    top: 50%; /* Центрирование по вертикали */
+    transform: translateY(-50%); /* Центрирование по вертикали */
+}
+
+.rlist li::marker{
+    content: none;
+}
+
+.rlist .card{
+    border: 1.2px solid seagreen;; 
+    margin: 10px;
+    padding: 10px;
+    width: 200px;
+}
+
+.rlist .card button {
+    background-color: seagreen;
+    color: white;
+    border: none;
+    padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    position:static;
+    bottom: 0;
+    margin-bottom: 10px;
+    margin-top: 10px;
+
+}
+
+.rlist button:hover {
+    background-color: rgb(36, 108, 67);
+}
+
+.rlist h2 {
+    margin-left: 10px;
+}

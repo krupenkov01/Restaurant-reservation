@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", system-ui;
+}
+
+a {
+  text-decoration: none;
+}
+
+video {
+  height: 100%; /* Занимает всю высоту родительского блока */
+  width: 100%; /* Занимает всю ширину родительского блока */
+  object-fit: cover; /* Обрезает видео, чтобы оно вписывалось в контейнер */
+}
+
+.vid {
+  position: relative; /* Изменено на relative для правильного позиционирования текста */
+  width: 100vw;
+  height: 88.78vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: antiquewhite;
+  margin: 0px;
+}
+
+.vid h1 {
+  position: absolute; /* Позволяет тексту находиться поверх видео */
+  z-index: 1; /* Устанавливаем текст выше видео */
+}
+
+
