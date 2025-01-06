@@ -10,7 +10,7 @@ const RestaurantComments = () => {
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const response = await fetch("http://localhost:3000/restaurants");
+        const response = await fetch("http://localhost:5000/api/restaurants");
         const data = await response.json();
         setRestaurants(data);
       } catch (error) {

@@ -89,5 +89,13 @@
       }
     }
   ],
-  "bookings": []
+  "bookings": [
+    {
+      "id": "01b3",
+      "tableId": "a0e6",
+      "restaurantId": "e7ed",
+      "date": "2025-01-15",
+      "time": "23:27"
+    }
+  ]
 }

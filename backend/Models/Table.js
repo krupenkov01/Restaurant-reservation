@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import sequelize from '../index.js'; // Подключение к базе данных
+import sequelize from '../db.js'; // Подключение к базе данных
 import Restaurant from './Restaurant.js'; // Подключение модели ресторана
 
 const Table = sequelize.define('Table', {

@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../db.js';  // Подключение к базе данных
-import Restaurant from './Restaurant.js';  // Подключение модели ресторана
+import Restaurant from "../models/Restaurant.js";  // Подключение модели ресторана
 
 const Comment = sequelize.define('Comment', {
   id: {
