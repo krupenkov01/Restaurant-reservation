@@ -20,7 +20,7 @@ function Login() {
     e.preventDefault();
     if (validate()){
       // console.log('proceed')
-      fetch("http://localhost:3000/user/" + username).then((res) => {
+      fetch("http://localhost:5000/api/users/" + username).then((res) => {
         return res.json();
       }).then((resp) => {
         console.log(resp)
@@ -122,7 +122,7 @@ function Login() {
     let regObj = {id, email, regpass, role};
     //console.log(regObj)
     if(isValidate()){
-    fetch("http://localhost:3000/user", {
+    fetch("http://localhost:5000/api/users", {
       method: 'POST',
       headers:{'content-type':'application/json'},
       body: JSON.stringify(regObj)

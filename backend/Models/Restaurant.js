@@ -11,6 +11,7 @@ const Restaurant = sequelize.define('Restaurant', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  
 });
 
 export default Restaurant;

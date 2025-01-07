@@ -16,6 +16,7 @@ const Comment = sequelize.define('Comment', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  
 });
 
 // Установим связь: каждый комментарий принадлежит одному ресторану

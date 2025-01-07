@@ -24,6 +24,7 @@ const Table = sequelize.define('Table', {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  
 });
 
 // Устанавливаем связь: каждый стол принадлежит одному ресторану
