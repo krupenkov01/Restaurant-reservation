@@ -11,13 +11,13 @@ const deleteRestaurant = async (id) => {
   if (!restaurant) {
     throw new Error(`Ресторан с ID ${id} не найден.`);
   }
-  return await restaurantRepository.delete(id);
+  return await restaurantRepository.deleteRest(id);
 };
 
 // Создать новый ресторан
 const createRestaurant = async (restaurantData) => {
-  if (!restaurantData.name || !restaurantData.location) {
-    throw new Error("Название и местоположение ресторана обязательны.");
+  if (!restaurantData.name || !restaurantData.id) {
+    throw new Error("Название и id");
   }
   return await restaurantRepository.create(restaurantData);
 };
