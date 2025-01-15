@@ -13,6 +13,11 @@ const commentRepository = {
     return await Comment.findAll({ where: { restaurantId } });
   },
 
+  // Добавляем новый метод для получения всех комментариев
+  getAllComments: async () => {
+    return await Comment.findAll();  // Получаем все комментарии
+  },
+
   updateComment: async (commentId, updatedData) => {
     const comment = await Comment.findByPk(commentId);
     if (comment) {

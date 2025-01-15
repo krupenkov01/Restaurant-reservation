@@ -4,6 +4,10 @@ import { Link, useLocation } from 'react-router-dom'
 
 const withoutSidebarRoutes = ['/login'];
 
+const logout = () => {
+  localStorage.removeItem('authToken');
+  navigate('/login');
+};
 
 
 function Navbar(){

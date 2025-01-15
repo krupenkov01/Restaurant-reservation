@@ -13,6 +13,11 @@ const commentService = {
     return await commentRepository.getCommentsByRestaurantId(restaurantId);
   },
 
+  // Добавляем новый метод для получения всех комментариев
+  getAllComments: async () => {
+    return await commentRepository.getAllComments();
+  },
+
   updateComment: async (commentId, updatedData) => {
     return await commentRepository.updateComment(commentId, updatedData);
   },

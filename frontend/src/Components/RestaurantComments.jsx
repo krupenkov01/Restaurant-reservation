@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import "../Styles/RestaurantComments.css"; // Импортируем стили
 
 const RestaurantComments = () => {
@@ -7,22 +8,17 @@ const RestaurantComments = () => {
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState({});
 
+  // Загружаем рестораны и комментарии при монтировании компонента
   useEffect(() => {
-    const fetchRestaurants = async () => {
+    const fetchRestaurantsAndComments = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/restaurants");
-        const data = await response.json();
-        setRestaurants(data);
-      } catch (error) {
-        console.error("Ошибка при загрузке ресторанов:", error);
-      }
-    };
+        // Получаем рестораны
+        const restaurantsResponse = await axios.get('http://localhost:5000/api/restaurants');
+        setRestaurants(restaurantsResponse.data);
 
-    const fetchComments = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/comments");
-        const data = await response.json();
-        const commentsMap = data.reduce((acc, comment) => {
+        // Получаем комментарии
+        const commentsResponse = await axios.get('http://localhost:5000/api/comments');
+        const commentsMap = commentsResponse.data.reduce((acc, comment) => {
           if (!acc[comment.restaurantId]) {
             acc[comment.restaurantId] = [];
           }
@@ -31,12 +27,11 @@ const RestaurantComments = () => {
         }, {});
         setComments(commentsMap);
       } catch (error) {
-        console.error("Ошибка при загрузке комментариев:", error);
+        console.error('Ошибка при загрузке данных:', error);
       }
     };
 
-    fetchRestaurants();
-    fetchComments();
+    fetchRestaurantsAndComments();
   }, []);
 
   const handleSelectRestaurant = (restaurant) => {
@@ -48,33 +43,30 @@ const RestaurantComments = () => {
     setComment(e.target.value);
   };
 
+  // Отправка комментария
   const handleSubmitComment = async (e) => {
     e.preventDefault();
-    if (comment) {
+    if (comment && selectedRestaurant) {
       const newComment = {
         restaurantId: selectedRestaurant.id,
         text: comment,
       };
 
       try {
-        await fetch("http://localhost:3000/comments", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newComment),
-        });
+        // Отправка POST-запроса для создания комментария
+        const response = await axios.post('http://localhost:5000/api/comments', newComment);
 
+        // Обновление состояния комментариев после успешной отправки
         setComments((prevComments) => ({
           ...prevComments,
           [selectedRestaurant.id]: [
             ...(prevComments[selectedRestaurant.id] || []),
-            comment,
+            response.data.text,
           ],
         }));
-        setComment("");
+        setComment(""); // Очистка поля ввода
       } catch (error) {
-        console.error("Ошибка при отправке комментария:", error);
+        console.error('Ошибка при отправке комментария:', error);
       }
     }
   };

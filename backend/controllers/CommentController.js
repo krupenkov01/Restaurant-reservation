@@ -1,6 +1,17 @@
 import commentService from '../services/CommentService.js';
 
 const commentController = {
+
+  getAllComments: async (req, res) => {
+    try {
+      // Получаем все комментарии через сервис
+      const comments = await commentService.getAllComments();
+      return res.status(200).json(comments);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+
   createComment: async (req, res) => {
     try {
       const comment = await commentService.createComment(req.body);
@@ -23,8 +34,12 @@ const commentController = {
   },
 
   getCommentsByRestaurantId: async (req, res) => {
+    const { restaurantId } = req.params;
     try {
-      const comments = await commentService.getCommentsByRestaurantId(req.params.restaurantId);
+      const comments = await commentService.getCommentsByRestaurantId(restaurantId);
+      if (!comments) {
+        return res.status(404).json({ message: 'Comments not found for this restaurant' });
+      }
       return res.status(200).json(comments);
     } catch (error) {
       return res.status(500).json({ error: error.message });

@@ -1,5 +1,7 @@
+// File: models/User.js
 import { DataTypes } from 'sequelize';
-import sequelize from '../db.js'; // Подключение к базе данных
+import sequelize from '../db.js';
+import bcrypt from 'bcrypt';
 
 const User = sequelize.define('User', {
   id: {
@@ -12,7 +14,7 @@ const User = sequelize.define('User', {
     allowNull: false,
     unique: true,
     validate: {
-      isEmail: true, // Проверка на валидность email
+      isEmail: true,
     },
   },
   regpass: {
@@ -22,8 +24,16 @@ const User = sequelize.define('User', {
   role: {
     type: DataTypes.ENUM('client', 'admin'),
     allowNull: false,
+    indexes: false,
   },
   
+   
+});
+
+// Хэшируем пароль перед сохранением
+User.beforeCreate(async (user) => {
+  const salt = await bcrypt.genSalt(10);
+  user.regpass = await bcrypt.hash(user.regpass, salt);
 });
 
 export default User;
