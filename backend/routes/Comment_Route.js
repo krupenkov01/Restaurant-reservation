@@ -1,6 +1,7 @@
 import express from 'express';
 import commentController from '../controllers/CommentController.js';
-
+import {commentValidation} from "../validations/CommentValidation.js"
+import validate from "../middlewares/validate.js";
 const router = express.Router();
 
 /**
@@ -85,7 +86,10 @@ router.get('/restaurant/:restaurantId', commentController.getCommentsByRestauran
  *       500:
  *         description: Ошибка сервера
  */
-router.post('/', commentController.createComment);
+router.post(
+    '/', 
+    validate(commentValidation.commentValidation),
+    commentController.createComment);
 
 /**
  * @swagger

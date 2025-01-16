@@ -8,7 +8,7 @@ const router = express.Router();
 router.post(
     "/",
     validate(userValidation.userValidation), // Middleware для валидации
-    userController.createUser // Убедитесь, что `createUser` экспортируется правильно
+    userController.createUser 
   );
 router.get('/:id', userController.getUserById);
 router.get('/', userController.getUserByEmail); // Пример: GET /api/users?email=test@example.com
