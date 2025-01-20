@@ -62,7 +62,7 @@ router.get("/", restaurantController.getAllRestaurants);
  *       500:
  *         description: Ошибка сервера
  */
-router.delete("/:id", restaurantController.deleteRestaurant);
+router.delete("/:id", authenticateJWT, restaurantController.deleteRestaurant);
 
 /**
  * @swagger

@@ -12,13 +12,26 @@ const getAllRestaurants = async (req, res) => {
 };
 
 // Удалить ресторан по ID
+// Удалить ресторан по ID
 const deleteRestaurant = async (req, res) => {
   try {
     const { id } = req.params;
+
+    // Проверяем, существует ли ресторан
+    const restaurant = await restaurantRepository.findById(id);
+    if (!restaurant) {
+      return res.status(404).json({ error: `Ресторан с ID ${id} не найден.` });
+    }
+
+    // Проверяем, является ли текущий пользователь менеджером данного ресторана
+    if (restaurant.managerId !== req.user.id) {
+      return res.status(403).json({ error: "У вас нет прав для удаления этого ресторана." });
+    }
+
     await restaurantService.deleteRestaurant(id);
     res.status(200).json({ message: `Ресторан с ID ${id} удалён.` });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
