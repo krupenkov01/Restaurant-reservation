@@ -1,11 +1,28 @@
 import { Sequelize } from 'sequelize';
+import UserModel from './models/User.js';
+import RestaurantModel from './models/Restaurant.js';
+import TableModel from './models/Table.js';
+import BookingModel from './models/Booking.js';
+import CommentModel from './models/Comment.js';
+import setupAssociations from './models/associations.js';
 
 // Настройка подключения к базе данных
 const sequelize = new Sequelize('restiki', 'root', '1234567890', {
   host: 'localhost',
-  dialect: 'mysql', 
+  dialect: 'mysql',
 });
 
+// Инициализация моделей
+const User = UserModel(sequelize);
+const Restaurant = RestaurantModel(sequelize);
+const Table = TableModel(sequelize);
+const Booking = BookingModel(sequelize);
+const Comment = CommentModel(sequelize);
+
+// Установка ассоциаций
+setupAssociations({ User, Restaurant, Table, Booking, Comment });
+
+// Проверка подключения
 const testConnection = async () => {
   try {
     await sequelize.authenticate();
@@ -17,4 +34,5 @@ const testConnection = async () => {
 
 testConnection();
 
+export { User, Restaurant, Table, Booking, Comment };
 export default sequelize;

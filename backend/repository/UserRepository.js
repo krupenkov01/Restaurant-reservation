@@ -1,4 +1,4 @@
-import User from '../models/User.js';
+import {User} from '../db.js';
 
 const userRepository = {
   createUser: async (userData) => {
@@ -9,8 +9,8 @@ const userRepository = {
     return await User.findByPk(userId);
   },
 
-  getUserByEmail: async (email) => {
-    return await User.findOne({ where: { email } });
+  getAllUsers: async () => {
+    return await User.findAll(); // Новый метод для получения всех пользователей
   },
 
   updateUser: async (userId, updatedData) => {

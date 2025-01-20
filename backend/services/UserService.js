@@ -2,7 +2,6 @@ import userRepository from '../repository/UserRepository.js';
 
 const userService = {
   createUser: async (userData) => {
-    // Здесь можно добавить дополнительные проверки, например, хэширование пароля
     return await userRepository.createUser(userData);
   },
 
@@ -10,8 +9,8 @@ const userService = {
     return await userRepository.getUserById(userId);
   },
 
-  getUserByEmail: async (email) => {
-    return await userRepository.getUserByEmail(email);
+  getAllUsers: async () => {
+    return await userRepository.getAllUsers(); // Новый метод для получения всех пользователей
   },
 
   updateUser: async (userId, updatedData) => {

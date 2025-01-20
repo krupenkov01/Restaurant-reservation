@@ -1,17 +1,28 @@
 import { DataTypes } from 'sequelize';
-import sequelize from '../db.js'; // Подключение к базе данных
 
-const Restaurant = sequelize.define('Restaurant', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    allowNull: false,
-  },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  
-});
+const RestaurantModel = (sequelize) => {
+  const Restaurant = sequelize.define('Restaurant', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      allowNull: false,
+      autoIncrement: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    managerId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Users',
+        key: 'id',
+      },
+    },
+  });
 
-export default Restaurant;
+  return Restaurant;
+};
+
+export default RestaurantModel;

@@ -1,7 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import User from '../models/User.js';
+import {User} from '../db.js';
 import { authenticateJWT, authorizeRole } from '../auth/authMiddleware.js';
 
 const router = express.Router();
@@ -20,9 +20,9 @@ router.post('/register', async (req, res) => {
 
 // Авторизация пользователя
 router.post('/login', async (req, res) => {
-  const { id, regpass } = req.body;
+  const { email, regpass } = req.body;
   try {
-    const user = await User.findOne({ where: { id } });
+    const user = await User.findOne({ where: { email } });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -51,6 +51,10 @@ router.get('/protected', authenticateJWT, (req, res) => {
 // Пример маршрута для роли admin
 router.get('/admin', authenticateJWT, authorizeRole('admin'), (req, res) => {
   res.json({ message: 'Welcome, admin!' });
+});
+
+router.get('/manager', authenticateJWT, authorizeRole('manager'), (req, res) => {
+  res.json({ message: 'Welcome, manager!' });
 });
 
 export default router;

@@ -1,4 +1,4 @@
-import Restaurant from "../models/Restaurant.js";
+import {Restaurant} from '../db.js';
 import { DbLog } from "../models/LogModels.js"; // Импортируйте модель DbLog
 
 // Функция для логирования действий с базой данных
@@ -45,9 +45,19 @@ const create = async (restaurantData) => {
   return restaurant;
 };
 
+// Обновить ресторан по ID
+const update = async (id, restaurantData) => {
+  const restaurant = await Restaurant.findByPk(id);
+  if (!restaurant) {
+    throw new Error(`Ресторан с ID ${id} не найден.`);
+  }
+  return await restaurant.update(restaurantData);
+};
+
 export default {
   findAll,
   findById,
   deleteRest,
   create,
+  update,
 };

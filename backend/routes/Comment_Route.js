@@ -66,18 +66,18 @@ router.get('/restaurant/:restaurantId', commentController.getCommentsByRestauran
  *           schema:
  *             type: object
  *             properties:
+ *               id:
+ *                 type: string
+ *                 description: Уникальный идентификатор комментария
+ *                 example: abc123
+ *               restaurantId:
+ *                 type: integer
+ *                 description: Идентификатор ресторана
+ *                 example: 67890
  *               text:
  *                 type: string
  *                 description: Текст комментария
  *                 example: Отличный ресторан, рекомендую!
- *               userId:
- *                 type: string
- *                 description: Идентификатор пользователя
- *                 example: 12345
- *               restaurantId:
- *                 type: string
- *                 description: Идентификатор ресторана
- *                 example: 67890
  *     responses:
  *       201:
  *         description: Комментарий успешно создан
@@ -86,9 +86,10 @@ router.get('/restaurant/:restaurantId', commentController.getCommentsByRestauran
  *       500:
  *         description: Ошибка сервера
  */
+
 router.post(
     '/', 
-    validate(commentValidation.commentValidation),
+    validate(commentValidation),
     commentController.createComment);
 
 /**

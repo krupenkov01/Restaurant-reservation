@@ -1,6 +1,8 @@
 import express from "express";
 const router = express.Router();
 import restaurantController from "../controllers/RestaurantController.js";
+import { authenticateJWT, authorizeRole } from "../auth/authMiddleware.js";
+
 
 /**
  * @swagger
@@ -67,7 +69,46 @@ router.delete("/:id", restaurantController.deleteRestaurant);
  * /api/restaurants:
  *   post:
  *     summary: Создать новый ресторан
+ *     tags:
+ *       - Restaurants
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: integer
+ *                 description: ID ресторана
+ *                 example: 10
+ *               name:
+ *                 type: string
+ *                 description: Название ресторана
+ *                 example: "Ресторан Уют"
+ *     responses:
+ *       201:
+ *         description: Ресторан успешно создан
+ *       400:
+ *         description: Неверный запрос
+ *       500:
+ *         description: Ошибка сервера
+ */
+router.post("/", authenticateJWT, authorizeRole("manager"), restaurantController.createRestaurant);
+
+/**
+ * @swagger
+ * /api/restaurants/{id}:
+ *   put:
+ *     summary: Обновить ресторан по ID
  *     tags: [Restaurants]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Уникальный идентификатор ресторана
+ *         schema:
+ *           type: string
  *     requestBody:
  *       required: true
  *       content:
@@ -78,19 +119,17 @@ router.delete("/:id", restaurantController.deleteRestaurant);
  *               name:
  *                 type: string
  *                 description: Название ресторана
- *                 example: Ресторан Уют
- *               address:
- *                 type: string
- *                 description: Адрес ресторана
- *                 example: ул. Ленина, д. 10
+ *                 example: "Новый Ресторан"
  *     responses:
- *       201:
- *         description: Ресторан успешно создан
- *       400:
- *         description: Неверный запрос
+ *       200:
+ *         description: Ресторан успешно обновлён
+ *       404:
+ *         description: Ресторан не найден
+ *       403:
+ *         description: У вас нет прав для изменения этого ресторана
  *       500:
  *         description: Ошибка сервера
  */
-router.post("/", restaurantController.createRestaurant);
+router.put("/:id", authenticateJWT, restaurantController.updateRestaurant);
 
 export default router;

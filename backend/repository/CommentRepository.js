@@ -1,4 +1,4 @@
-import Comment from '../models/Comment.js';
+import {Comment} from '../db.js';
 
 const commentRepository = {
   createComment: async (commentData) => {

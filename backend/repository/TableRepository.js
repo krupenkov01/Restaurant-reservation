@@ -1,5 +1,4 @@
-import Table from "../models/Table.js";
-
+import {Table} from '../db.js';
 // Получить все столы
 export const getAllTables = async () => {
   return await Table.findAll();
