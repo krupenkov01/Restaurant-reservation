@@ -1,15 +1,16 @@
 import * as BookingService from "../services/BookingService.js";
 import restaurantRepository from "../repository/RestaurantRepository.js"; // Импортируем репозиторий ресторанов
 
-// Создать бронирование
+    
+
 export const createBooking = async (req, res) => {
-  try {
-    const booking = await BookingService.createBooking(req.body);
-    res.status(201).json(booking);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
+    try {
+      const booking = await BookingService.createBooking(req.body);
+      res.status(201).json(booking);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  };
 
 // Получить все бронирования
 export const getAllBookings = async (req, res) => {
