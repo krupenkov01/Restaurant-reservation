@@ -2,14 +2,15 @@ import express from 'express';
 import userController from '../controllers/UserController.js';
 import { userValidation } from "../validations/UserValidation.js";
 import validate from "../middlewares/validate.js";
+import { authenticateJWT, authorizeRole } from "../auth/authMiddleware.js";
+const router = express.Router();
 
 /**
  * @swagger
  * tags:
  *   name: Users
- *   description: API для управления пользователями
+ *   description: Управление пользователями
  */
-const router = express.Router();
 
 /**
  * @swagger
@@ -24,33 +25,22 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               id:
- *                 type: string
- *                 description: Уникальный идентификатор пользователя
  *               email:
  *                 type: string
- *                 description: Email пользователя
- *               regpass:
+ *                 format: email
+ *                 description: Электронная почта пользователя
+ *                 example: user@example.com
+ *               password:
  *                 type: string
  *                 description: Пароль пользователя
+ *                 example: password123
  *               role:
  *                 type: string
- *                 enum: [client, admin]
- *                 description: Роль пользователя
+ *                 description: Роль пользователя (например, admin, user)
+ *                 example: user
  *     responses:
  *       201:
  *         description: Пользователь успешно создан
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: string
- *                 email:
- *                   type: string
- *                 role:
- *                   type: string
  *       400:
  *         description: Ошибка валидации данных
  *       500:
@@ -71,40 +61,31 @@ router.post(
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: string
  *         required: true
  *         description: Уникальный идентификатор пользователя
+ *         schema:
+ *           type: integer
  *     responses:
  *       200:
- *         description: Информация о пользователе
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: string
- *                 email:
- *                   type: string
- *                 role:
- *                   type: string
+ *         description: Пользователь успешно получен
  *       404:
  *         description: Пользователь не найден
  *       500:
  *         description: Ошибка сервера
  */
 router.get('/:id', userController.getUserById);
+router.get('/:id', userController.getUserById);
+router.get('/:id', userController.getUserById);
 
 /**
  * @swagger
  * /api/users:
  *   get:
- *     summary: Получить список всех пользователей
+ *     summary: Получить всех пользователей
  *     tags: [Users]
  *     responses:
  *       200:
- *         description: Список пользователей
+ *         description: Список всех пользователей успешно получен
  *         content:
  *           application/json:
  *             schema:
@@ -113,29 +94,33 @@ router.get('/:id', userController.getUserById);
  *                 type: object
  *                 properties:
  *                   id:
- *                     type: string
+ *                     type: integer
+ *                     description: Уникальный идентификатор пользователя
  *                   email:
  *                     type: string
+ *                     format: email
+ *                     description: Электронная почта пользователя
  *                   role:
  *                     type: string
+ *                     description: Роль пользователя
  *       500:
  *         description: Ошибка сервера
  */
-router.get('/', userController.getAllUsers);
+router.get('/', authenticateJWT, authorizeRole("admin"), userController.getAllUsers);
 
 /**
  * @swagger
  * /api/users/{id}:
  *   put:
- *     summary: Обновить данные пользователя
+ *     summary: Обновить пользователя по ID
  *     tags: [Users]
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: string
  *         required: true
  *         description: Уникальный идентификатор пользователя
+ *         schema:
+ *           type: integer
  *     requestBody:
  *       required: true
  *       content:
@@ -145,45 +130,47 @@ router.get('/', userController.getAllUsers);
  *             properties:
  *               email:
  *                 type: string
- *                 description: Новый email пользователя
- *               regpass:
+ *                 format: email
+ *                 description: Электронная почта пользователя
+ *               password:
  *                 type: string
  *                 description: Новый пароль пользователя
  *               role:
  *                 type: string
- *                 enum: [client, admin]
  *                 description: Новая роль пользователя
  *     responses:
  *       200:
- *         description: Данные пользователя обновлены
+ *         description: Пользователь успешно обновлен
  *       404:
  *         description: Пользователь не найден
+ *       400:
+ *         description: Ошибка валидации данных
  *       500:
  *         description: Ошибка сервера
  */
-router.put('/:id', userController.updateUser);
+router.put('/:id',  authenticateJWT, authorizeRole("admin"), userController.updateUser);
 
 /**
  * @swagger
  * /api/users/{id}:
  *   delete:
- *     summary: Удалить пользователя
+ *     summary: Удалить пользователя по ID
  *     tags: [Users]
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: string
  *         required: true
  *         description: Уникальный идентификатор пользователя
+ *         schema:
+ *           type: integer
  *     responses:
  *       200:
- *         description: Пользователь успешно удалён
+ *         description: Пользователь успешно удален
  *       404:
  *         description: Пользователь не найден
  *       500:
  *         description: Ошибка сервера
  */
-router.delete('/:id', userController.deleteUser);
+router.delete('/:id', authenticateJWT, authorizeRole("admin"), userController.deleteUser);
 
 export default router;

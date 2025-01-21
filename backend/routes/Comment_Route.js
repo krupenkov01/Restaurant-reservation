@@ -1,14 +1,15 @@
 import express from 'express';
 import commentController from '../controllers/CommentController.js';
-import {commentValidation} from "../validations/CommentValidation.js"
+import { commentValidation } from "../validations/CommentValidation.js";
 import validate from "../middlewares/validate.js";
+
 const router = express.Router();
 
 /**
  * @swagger
  * tags:
  *   name: Comments
- *   description: API для управления комментариями
+ *   description: Управление комментариями
  */
 
 /**
@@ -23,10 +24,10 @@ const router = express.Router();
  *         required: true
  *         description: Уникальный идентификатор ресторана
  *         schema:
- *           type: string
+ *           type: integer
  *     responses:
  *       200:
- *         description: Комментарии успешно получены
+ *         description: Список комментариев успешно получен
  *         content:
  *           application/json:
  *             schema:
@@ -35,21 +36,20 @@ const router = express.Router();
  *                 type: object
  *                 properties:
  *                   id:
- *                     type: string
+ *                     type: integer
  *                     description: Уникальный идентификатор комментария
+ *                   restaurantId:
+ *                     type: integer
+ *                     description: Идентификатор ресторана
  *                   text:
  *                     type: string
  *                     description: Текст комментария
- *                   userId:
+ *                   createdAt:
  *                     type: string
- *                     description: Идентификатор пользователя
- *                   restaurantId:
- *                     type: string
- *                     description: Идентификатор ресторана
+ *                     format: date-time
+ *                     description: Дата и время создания комментария
  *       404:
- *         description: Ресторан или комментарии не найдены
- *       500:
- *         description: Ошибка сервера
+ *         description: Ресторан не найден
  */
 router.get('/restaurant/:restaurantId', commentController.getCommentsByRestaurantId);
 
@@ -66,31 +66,23 @@ router.get('/restaurant/:restaurantId', commentController.getCommentsByRestauran
  *           schema:
  *             type: object
  *             properties:
- *               id:
- *                 type: string
- *                 description: Уникальный идентификатор комментария
- *                 example: abc123
  *               restaurantId:
  *                 type: integer
  *                 description: Идентификатор ресторана
- *                 example: 67890
+ *                 example: 101
  *               text:
  *                 type: string
  *                 description: Текст комментария
- *                 example: Отличный ресторан, рекомендую!
+ *                 example: Отличное место!
  *     responses:
  *       201:
  *         description: Комментарий успешно создан
  *       400:
- *         description: Неверный запрос
+ *         description: Ошибка валидации данных
  *       500:
  *         description: Ошибка сервера
  */
-
-router.post(
-    '/', 
-    validate(commentValidation),
-    commentController.createComment);
+router.post('/', validate(commentValidation), commentController.createComment);
 
 /**
  * @swagger
@@ -100,7 +92,7 @@ router.post(
  *     tags: [Comments]
  *     responses:
  *       200:
- *         description: Список комментариев успешно получен
+ *         description: Список всех комментариев успешно получен
  *         content:
  *           application/json:
  *             schema:
@@ -109,17 +101,18 @@ router.post(
  *                 type: object
  *                 properties:
  *                   id:
- *                     type: string
+ *                     type: integer
  *                     description: Уникальный идентификатор комментария
+ *                   restaurantId:
+ *                     type: integer
+ *                     description: Идентификатор ресторана
  *                   text:
  *                     type: string
  *                     description: Текст комментария
- *                   userId:
+ *                   createdAt:
  *                     type: string
- *                     description: Идентификатор пользователя
- *                   restaurantId:
- *                     type: string
- *                     description: Идентификатор ресторана
+ *                     format: date-time
+ *                     description: Дата и время создания комментария
  *       500:
  *         description: Ошибка сервера
  */
@@ -137,7 +130,7 @@ router.get('/', commentController.getAllComments);
  *         required: true
  *         description: Уникальный идентификатор комментария
  *         schema:
- *           type: string
+ *           type: integer
  *     responses:
  *       200:
  *         description: Комментарий успешно получен
@@ -160,7 +153,7 @@ router.get('/:id', commentController.getCommentById);
  *         required: true
  *         description: Уникальный идентификатор комментария
  *         schema:
- *           type: string
+ *           type: integer
  *     requestBody:
  *       required: true
  *       content:
@@ -170,13 +163,15 @@ router.get('/:id', commentController.getCommentById);
  *             properties:
  *               text:
  *                 type: string
- *                 description: Обновленный текст комментария
- *                 example: Понравилось ещё больше!
+ *                 description: Новый текст комментария
+ *                 example: Обновленный комментарий!
  *     responses:
  *       200:
  *         description: Комментарий успешно обновлен
  *       404:
  *         description: Комментарий не найден
+ *       400:
+ *         description: Ошибка валидации данных
  *       500:
  *         description: Ошибка сервера
  */
@@ -194,7 +189,7 @@ router.put('/:id', commentController.updateComment);
  *         required: true
  *         description: Уникальный идентификатор комментария
  *         schema:
- *           type: string
+ *           type: integer
  *     responses:
  *       200:
  *         description: Комментарий успешно удален

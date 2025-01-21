@@ -1,13 +1,59 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import {User} from '../db.js';
+import { User } from '../db.js';
 import { authenticateJWT, authorizeRole } from '../auth/authMiddleware.js';
 
 const router = express.Router();
 const JWT_SECRET = 'your_jwt_secret_key';
 
-// Регистрация пользователя
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *       description: Используйте `Bearer <токен>` для авторизации
+ */
+
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     summary: Регистрация пользователя
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: integer
+ *                 description: Уникальный идентификатор пользователя
+ *                 example: 1
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: Электронная почта пользователя
+ *                 example: user@example.com
+ *               regpass:
+ *                 type: string
+ *                 description: Пароль пользователя
+ *                 example: password123
+ *               role:
+ *                 type: string
+ *                 description: Роль пользователя (например, admin, manager)
+ *                 example: user
+ *     responses:
+ *       201:
+ *         description: Пользователь успешно зарегистрирован
+ *       400:
+ *         description: Ошибка валидации данных
+ */
 router.post('/register', async (req, res) => {
   const { id, email, regpass, role } = req.body;
   try {
@@ -18,7 +64,46 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// Авторизация пользователя
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Авторизация пользователя
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: Электронная почта пользователя
+ *                 example: user@example.com
+ *               regpass:
+ *                 type: string
+ *                 description: Пароль пользователя
+ *                 example: password123
+ *     responses:
+ *       200:
+ *         description: Успешная авторизация, возвращает JWT токен
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: JWT токен для доступа
+ *       404:
+ *         description: Пользователь не найден
+ *       401:
+ *         description: Неверные учетные данные
+ *       400:
+ *         description: Ошибка валидации данных
+ */
 router.post('/login', async (req, res) => {
   const { email, regpass } = req.body;
   try {
@@ -43,16 +128,56 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Пример защищенного маршрута
+/**
+ * @swagger
+ * /api/auth/protected:
+ *   get:
+ *     summary: Пример защищенного маршрута
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Доступ разрешен
+ *       401:
+ *         description: Необходима авторизация
+ */
 router.get('/protected', authenticateJWT, (req, res) => {
   res.json({ message: 'You have access!', user: req.user });
 });
 
-// Пример маршрута для роли admin
+/**
+ * @swagger
+ * /api/auth/admin:
+ *   get:
+ *     summary: Пример маршрута для роли admin
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Добро пожаловать, администратор!
+ *       401:
+ *         description: Необходима авторизация
+ */
 router.get('/admin', authenticateJWT, authorizeRole('admin'), (req, res) => {
   res.json({ message: 'Welcome, admin!' });
 });
 
+/**
+ * @swagger
+ * /api/auth/manager:
+ *   get:
+ *     summary: Пример маршрута для роли manager
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Добро пожаловать, менеджер!
+ *       401:
+ *         description: Необходима авторизация
+ */
 router.get('/manager', authenticateJWT, authorizeRole('manager'), (req, res) => {
   res.json({ message: 'Welcome, manager!' });
 });
